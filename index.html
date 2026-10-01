@@ -16,7 +16,28 @@
   </header>
 
   <main class="container">
-    <div id="post-list" role="list" aria-label="포스트 목록"></div>
+    <section class="apps-section" aria-label="웹앱">
+      <h2 class="section-title">웹앱</h2>
+      <div class="app-cards">
+        <a href="apps/2048/index.html" class="app-card">
+          <div class="app-card__preview">
+            <div class="mini-tile" style="--c:#f2b179">8</div>
+            <div class="mini-tile" style="--c:#edcf72">128</div>
+            <div class="mini-tile" style="--c:#edc22e">2048</div>
+            <div class="mini-tile" style="--c:#f67c5f">32</div>
+          </div>
+          <div class="app-card__body">
+            <h3 class="app-card__title">2048</h3>
+            <p class="app-card__desc">방향키로 타일을 밀어 2048을 만드는 퍼즐 게임</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section aria-label="포스트 목록">
+      <h2 class="section-title">포스트</h2>
+      <div id="post-list" role="list"></div>
+    </section>
   </main>
 
   <footer class="site-footer">

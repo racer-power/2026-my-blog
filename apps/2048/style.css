@@ -1,0 +1,335 @@
+/* ===== CSS 변수 ===== */
+:root {
+  --board-size: min(92vw, 460px, 70vh);
+  --gap: calc(var(--board-size) * 0.03);
+  --cell: calc((var(--board-size) - var(--gap) * 5) / 4);
+
+  /* UI 색상 */
+  --page-bg: #faf8ef;
+  --text: #776e65;
+  --board-bg: #bbada0;
+  --cell-bg: rgba(238, 228, 218, 0.35);
+  --btn-bg: #8f7a66;
+  --btn-text: #f9f6f2;
+  --score-bg: #bbada0;
+  --score-label: #eee4da;
+  --light-text: #f9f6f2;
+}
+
+/* ===== 리셋 & 베이스 ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: var(--page-bg);
+  color: var(--text);
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100%;
+  padding: 16px 8px;
+}
+
+/* ===== 앱 레이아웃 ===== */
+.app {
+  width: var(--board-size);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ===== 헤더 ===== */
+.game-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.title {
+  /* 보드 크기 기준: 세로가 낮은 화면(가로 모드, iframe)에서도 점수판과 겹치지 않도록 */
+  font-size: clamp(32px, calc(var(--board-size) * 0.16), 72px);
+  font-weight: 700;
+  color: #776e65;
+  line-height: 1;
+}
+
+.scores {
+  display: flex;
+  gap: 8px;
+}
+
+.score-box {
+  background: var(--score-bg);
+  border-radius: 6px;
+  padding: 8px 14px;
+  min-width: 64px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.score-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--score-label);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.score-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+/* ===== 게임 인트로 ===== */
+.game-intro {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.hint {
+  font-size: 14px;
+  color: var(--text);
+  flex: 1;
+}
+
+.hint strong {
+  color: #776e65;
+}
+
+/* ===== 버튼 ===== */
+.btn {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  white-space: nowrap;
+  transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:hover {
+  background: #7a6959;
+}
+
+.btn:active {
+  background: #6b5b4e;
+}
+
+.btn:focus-visible {
+  outline: 3px solid #f59563;
+  outline-offset: 2px;
+}
+
+/* ===== 보드 ===== */
+.board {
+  position: relative;
+  width: var(--board-size);
+  height: var(--board-size);
+  padding: var(--gap);
+  border-radius: 8px;
+  background: var(--board-bg);
+  touch-action: none;
+  user-select: none;
+  outline: none;
+  flex-shrink: 0;
+}
+
+/* ===== 그리드 배경 (빈 셀) ===== */
+.grid-bg {
+  display: grid;
+  grid-template: repeat(4, 1fr) / repeat(4, 1fr);
+  gap: var(--gap);
+  width: 100%;
+  height: 100%;
+}
+
+.grid-bg::before {
+  /* 16개 빈 셀을 CSS counter로 생성 대신 JS에서 생성 */
+  content: none;
+}
+
+/* ===== 타일 레이어 ===== */
+.tile-layer {
+  position: absolute;
+  inset: var(--gap);
+  display: grid;
+  grid-template: repeat(4, 1fr) / repeat(4, 1fr);
+  gap: var(--gap);
+}
+
+/* ===== 타일 ===== */
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: calc(var(--cell) * 0.45);
+  line-height: 1;
+  transition: none;
+}
+
+/* 자릿수별 글자 크기 */
+.tile-128,
+.tile-256,
+.tile-512 {
+  font-size: calc(var(--cell) * 0.38);
+}
+
+.tile-1024,
+.tile-2048 {
+  font-size: calc(var(--cell) * 0.30);
+}
+
+.tile-super {
+  font-size: calc(var(--cell) * 0.24);
+}
+
+/* ===== 타일 값별 색상 ===== */
+.tile-2   { background: #eee4da; color: #776e65; }
+.tile-4   { background: #ede0c8; color: #776e65; }
+.tile-8   { background: #f2b179; color: #f9f6f2; }
+.tile-16  { background: #f59563; color: #f9f6f2; }
+.tile-32  { background: #f67c5f; color: #f9f6f2; }
+.tile-64  { background: #f65e3b; color: #f9f6f2; }
+.tile-128 { background: #edcf72; color: #f9f6f2; box-shadow: 0 0 10px rgba(243, 215, 116, 0.24); }
+.tile-256 { background: #edcc61; color: #f9f6f2; box-shadow: 0 0 15px rgba(243, 215, 116, 0.32); }
+.tile-512 { background: #edc850; color: #f9f6f2; box-shadow: 0 0 20px rgba(243, 215, 116, 0.40); }
+.tile-1024 { background: #edc53f; color: #f9f6f2; box-shadow: 0 0 25px rgba(243, 215, 116, 0.48); }
+.tile-2048 { background: #edc22e; color: #f9f6f2; box-shadow: 0 0 30px rgba(243, 215, 116, 0.56); }
+.tile-super { background: #3c3a32; color: #f9f6f2; }
+
+/* ===== 애니메이션 ===== */
+@keyframes appear {
+  0%   { transform: scale(0); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.tile-new {
+  animation: appear 200ms ease-in-out both;
+}
+
+.tile-merged {
+  animation: pop 200ms ease-in-out both;
+}
+
+/* ===== 오버레이 ===== */
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(238, 228, 218, 0.73);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  border-radius: 8px;
+  animation: fadein 200ms ease-in-out both;
+  z-index: 10;
+}
+
+.overlay.win {
+  background: rgba(237, 194, 46, 0.5);
+  color: #fff;
+}
+
+.overlay.win .overlay-message {
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.overlay-message {
+  font-size: clamp(20px, 6vw, 32px);
+  font-weight: 700;
+  color: var(--text);
+  text-align: center;
+  padding: 0 16px;
+}
+
+.overlay-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ===== 유틸 ===== */
+.hidden {
+  display: none !important;
+}
+
+/* ===== 안내 문구 ===== */
+.instructions {
+  font-size: 13px;
+  color: #a09080;
+  text-align: center;
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 480px) {
+  .title {
+    font-size: 36px;
+  }
+
+  .score-value {
+    font-size: 16px;
+  }
+
+  .score-label {
+    font-size: 10px;
+  }
+
+  .score-box {
+    padding: 6px 10px;
+    min-width: 52px;
+  }
+
+  .game-header {
+    gap: 6px;
+  }
+
+  .hint {
+    font-size: 13px;
+  }
+
+  .btn {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+}
