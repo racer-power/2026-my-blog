@@ -170,6 +170,24 @@ main.container { flex: 1; padding-top: 4rem; padding-bottom: 6rem; }
   color: #f9f6f2;
 }
 
+.app-card__preview--pixel {
+  background: #222034;
+  align-items: center;
+  justify-content: center;
+}
+
+.pixel-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 14px);
+  grid-template-rows: repeat(4, 14px);
+  gap: 2px;
+}
+
+.pixel-preview-grid span {
+  background: var(--pc, #333);
+  border-radius: 2px;
+}
+
 .app-card__body { padding: 0.875rem 1rem; }
 
 .app-card__title {

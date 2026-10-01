@@ -1,0 +1,364 @@
+:root {
+  --bg: #f5f5f5;
+  --surface: #ffffff;
+  --border: #d0d0d0;
+  --text: #1a1a1a;
+  --text-muted: #888888;
+  --accent: #5b6ee1;
+  --accent-text: #ffffff;
+  --grid-line: rgba(0,0,0,0.12);
+  --checker-a: #ffffff;
+  --checker-b: #e5e5e5;
+  --canvas-size: min(92vw, 60vh, 512px);
+  --swatch-size: 32px;
+  --radius: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1a1a;
+    --surface: #2a2a2a;
+    --border: #404040;
+    --text: #e8e8e8;
+    --text-muted: #888888;
+    --grid-line: rgba(255,255,255,0.15);
+    --checker-a: #3a3a3a;
+    --checker-b: #2e2e2e;
+  }
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", "Malgun Gothic", sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.app-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+}
+
+.app-subtitle {
+  color: var(--text-muted);
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+/* ===== Layout ===== */
+.editor-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .editor-layout {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  /* let the canvas column shrink next to the fixed 300px sidebar (768~860px) */
+  .canvas-area {
+    min-width: 0;
+  }
+}
+
+.canvas-area {
+  width: 100%;
+  max-width: var(--canvas-size);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== Canvas ===== */
+.canvas-wrap {
+  width: var(--canvas-size);
+  /* height follows width via aspect-ratio so the box stays square when max-width clamps it */
+  height: auto;
+  max-width: 100%;
+  aspect-ratio: 1;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+#pixel-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  cursor: crosshair;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.status {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  min-height: 1.2em;
+  margin-top: 8px;
+  text-align: center;
+  width: 100%;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Must come after the base .sidebar rule, otherwise width:100% wins */
+@media (min-width: 768px) {
+  .sidebar {
+    width: 300px;
+    flex-shrink: 0;
+  }
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+
+.panel-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin: 0 0 10px 0;
+}
+
+/* ===== Tools ===== */
+.tool-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.tool-btn {
+  flex: 1;
+  padding: 6px 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.875rem;
+  min-height: 36px;
+  touch-action: manipulation;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.tool-btn:hover {
+  background: var(--border);
+}
+
+.tool-btn.is-active {
+  background: var(--accent);
+  color: var(--accent-text);
+  border-color: var(--accent);
+}
+
+.current-color {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.current-color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 2px solid var(--border);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.current-color-hex {
+  font-family: monospace;
+  font-size: 0.875rem;
+  color: var(--text);
+}
+
+/* ===== Palette Grid ===== */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(8, var(--swatch-size));
+  gap: 6px;
+}
+
+@media (max-width: 767px) {
+  .palette-grid {
+    --swatch-size: 36px;
+    grid-template-columns: repeat(auto-fill, minmax(var(--swatch-size), 1fr));
+  }
+}
+
+.swatch {
+  width: var(--swatch-size);
+  height: var(--swatch-size);
+  min-height: 36px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  padding: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.1s;
+}
+
+.swatch:hover {
+  transform: scale(1.1);
+  z-index: 1;
+  position: relative;
+}
+
+.swatch.is-selected {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 8 x 32px + 7 x 6px = 298px does not fit the 274px panel content box of a
+   300px sidebar. Fit 8 square columns into the available width instead. */
+@media (min-width: 768px) {
+  .palette-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .swatch {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 1;
+  }
+}
+
+/* ===== Custom Color Controls ===== */
+.custom-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+#color-picker {
+  width: 44px;
+  height: 36px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  background: var(--surface);
+  min-height: 36px;
+  touch-action: manipulation;
+}
+
+.custom-empty {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin: 6px 0 0 0;
+  font-style: italic;
+}
+
+/* ===== Buttons ===== */
+.btn {
+  padding: 6px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.875rem;
+  min-height: 36px;
+  touch-action: manipulation;
+  transition: background 0.15s, opacity 0.15s;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: var(--border);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.btn-ghost:hover {
+  background: var(--border);
+  color: var(--text);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-text);
+  border-color: var(--accent);
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  background: var(--accent);
+}
+
+/* ===== File Actions ===== */
+.action-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.export-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.export-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+select {
+  padding: 6px 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.875rem;
+  min-height: 36px;
+  touch-action: manipulation;
+}
