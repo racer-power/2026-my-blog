@@ -180,6 +180,7 @@
   document.addEventListener('keydown', function (e) {
     var dir = keyMap[e.key];
     if (!dir) return;
+    if (over || (won && !keepPlaying)) return;
     e.preventDefault();
     handleMove(dir);
   });

@@ -16,6 +16,19 @@
   --light-text: #f9f6f2;
 }
 
+/* ===== 다크 모드 ===== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page-bg:  #1a1a18;
+    --text:     #c9c0b5;
+    --board-bg: #4a4038;
+    --cell-bg:  rgba(80, 70, 60, 0.4);
+    --btn-bg:   #6b5b4e;
+    --score-bg: #4a4038;
+    --score-label: #b8a898;
+  }
+}
+
 /* ===== 리셋 & 베이스 ===== */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -168,10 +181,6 @@ body {
   height: 100%;
 }
 
-.grid-bg::before {
-  /* 16개 빈 셀을 CSS counter로 생성 대신 JS에서 생성 */
-  content: none;
-}
 
 /* ===== 타일 레이어 ===== */
 .tile-layer {
