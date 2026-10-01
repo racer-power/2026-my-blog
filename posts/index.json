@@ -1,0 +1,23 @@
+[
+  {
+    "slug": "2026-10-01-what-i-learned-today",
+    "title": "오늘 배운 것",
+    "date": "2026-10-01",
+    "tags": ["HTML", "CSS", "JavaScript", "회고"],
+    "description": "클로드 코드로 블로그를 만들면서 HTML, CSS, JavaScript가 각각 어떤 역할을 하는지 직접 느낀 것들을 정리했습니다."
+  },
+  {
+    "slug": "2026-01-15-markdown-guide",
+    "title": "마크다운 문법 가이드",
+    "date": "2026-01-15",
+    "tags": ["마크다운", "가이드"],
+    "description": "이 블로그에서 사용할 수 있는 마크다운 문법을 모두 정리했습니다. 제목, 코드 블록, 표 등 다양한 요소를 테스트합니다."
+  },
+  {
+    "slug": "2026-01-01-hello-world",
+    "title": "안녕하세요, 블로그를 시작합니다",
+    "date": "2026-01-01",
+    "tags": ["소개"],
+    "description": "순수 HTML, CSS, JavaScript로 만든 마크다운 블로그의 첫 번째 포스트입니다."
+  }
+]

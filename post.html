@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Blog</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="site-title">My Blog</a>
+      <button id="theme-toggle" aria-label="다크 모드로 전환">🌙</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <a href="index.html" class="back-link" aria-label="목록으로 돌아가기">← 목록으로</a>
+    <article id="post-content" role="main"></article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 My Blog</p>
+    </div>
+  </footer>
+
+  <script src="js/parser.js"></script>
+</body>
+</html>
